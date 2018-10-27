@@ -3,7 +3,7 @@
 
 WebScanner project -  tool for monitoring servers, websites and services
 # Goal
-General goal is to provide universal server tool being able to sending requests in order specified by implemented Scheduler. Specific responses will be saved in database operated by WebScanner. Configuration will be possible by using build-in application interface.
+General goal is to provide universal server tool being able to send requests in order specified by implemented Scheduler. Specific responses will be saved in database operated by WebScanner. Configuration will be possible by using build-in application interface.
 # IDE
 VS Code + plugins OR Visual Studio + Resharper
 # Language
@@ -13,7 +13,7 @@ C# 7.0
 # Scope(still open)
 * Repository structure in a manner of S. Allen's approach
 * C# naming conventions
-* using c# design patterns
+* Using c# design patterns
 * Usage of FluentAssertions
 * DDD
 * Reference materials (e.g. books, articles, lectures)
@@ -33,3 +33,9 @@ WebScanner are welcome! Feel free to contact with us!
 * Deleting order: POST [ip]/order/delete
 
  ARGUMENT: int orderId
+ 
+ # Solution Structure
+ coming soon!
+ # Project schedule
+ coming soon!
+ 

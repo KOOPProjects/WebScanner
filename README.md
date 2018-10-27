@@ -19,9 +19,9 @@ C# 7.0
 * Reference materials (e.g. books, articles, lectures)
 * Readme-driven development
 # Reason for creating the application
-Application is aimed to people who want to manage own network resorces by sending specific responses
-to endpoints. Because of building application in DDD approach, application should be easy to maintain and expand. All people who want to work with us or personalize
-WebScanner are welcome! Feel free to contact with us!
+Application is aimed to people who want to manage their network resorces by sending specific requests
+to endpoints. Application is also to be used by developers, we try to build app in DDD aproach, so it will be easy to maintain and expand. All people who want to work with us or personalize
+WebScanner are welcome to do so! Feel free to contact us!
 # Technologies
 * Quartz.NET for scheduling tasks
 * PostgreSQL for saving configuration and responses

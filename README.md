@@ -3,6 +3,10 @@
 
 WebScanner project - tool for monitoring servers, websites and services.
 
+#  Version 
+
+v0.1.0
+
 #  Goal
 
 Main goal is to provide server utility which can send requests in order specified by implemented Scheduler. Specific responses will be saved in database operated by WebScanner. 

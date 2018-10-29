@@ -41,9 +41,11 @@ Application is aimed at people who want to manage their network resources by sen
 
 #  Application interface
 
-* Adding order: `POST [host]/order/add`
+* Adding order: `POST [host]/api/orders/add`
+or `POST [host]/api/orders`
 ARGUMENT: Order order ( MUST ADD A MODEL STRUCTURE )
-* Deleting order: `POST [host]/order/delete`
+* Deleting order: `POST [host]/api/orders/delete`
+or `DELETE [host]/api/orders`
 ARGUMENT: int orderId
 
  #  Solution Structure

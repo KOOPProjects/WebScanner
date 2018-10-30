@@ -5,7 +5,7 @@ WebScanner project - tool for monitoring servers, websites and services.
 
 #  Version
 
-v0.2.0
+v0.3.0
 
 #  Goal
 

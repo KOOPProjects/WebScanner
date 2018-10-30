@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <DockerTargetOS>Linux</DockerTargetOS>
+    <UserSecretsId>f805a934-e74c-4f6e-9320-131e6f3289d6</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +14,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.0.1916590" />
   </ItemGroup>
 
   <ItemGroup>

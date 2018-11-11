@@ -1,5 +1,8 @@
 # webscanner changelog
 
+## 0.3.1
+- fix Dockerfile path
+
 ## 0.3.0
 - added docker support
 

@@ -14,7 +14,7 @@ namespace WebScanner.Models.Jobs
         {
             var ping = new Ping();
             var pingReply = ping.Send(context.JobDetail.JobDataMap.GetString("TargetAddress"));
-            Debug.WriteLine("Pinging " + pingReply.Address.ToString() + " -status: " + pingReply.Status.ToString());
+            Debug.WriteLine("host: " + pingReply.Address.ToString() + " status: " + pingReply.Status.ToString() + " latency: " + pingReply.RoundtripTime.ToString() + "ms");
         }
     }
 }

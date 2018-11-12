@@ -20,8 +20,8 @@ namespace WebScanner.Examples
                 ServerJobDetailComposer<ServerOrderJob>,
                 SimpleTriggerComposer,
                 ServerOrderJob>(
-                new ServerJobDetailComposer<ServerOrderJob>(1, "172.217.16.14"),
-                new SimpleTriggerComposer(5, 1)
+                    new ServerJobDetailComposer<ServerOrderJob>(1, "172.217.16.14"),
+                    new SimpleTriggerComposer(5, 1)
                 );
 
             //asynchronous adding order.

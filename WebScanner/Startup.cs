@@ -26,7 +26,6 @@ namespace WebScanner
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            SimulateAddingOrder.Execute();
         }
       
 
@@ -36,8 +35,7 @@ namespace WebScanner
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            var connectionString =
-               "";
+            var connectionString = Configuration.GetConnectionString("DATABASE_URL");
             services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(options =>
             options.UseNpgsql(connectionString));
         }

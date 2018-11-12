@@ -3,22 +3,24 @@ using Quartz.Impl;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WebScanner.Models.Interfaces;
+using WebScanner.Models.Providers.Interfaces;
 
-namespace WebScanner.Models.Managers
+namespace WebScanner.Models.Providers
 {
-    public class ScheduleManager<S,A,T> : IScheduleManager<S, A, T> where S : IJobDetailComposer<T> where A : ITriggerComposer where T : IJob
+    public class AddingOrderProvider<S,A,T> : IAddingOrderProvider where S : IJobDetailComposer<T> where T : IJob where A : ITriggerComposer
     {
         private readonly S jobDetailComposer;
         private readonly A triggerComposer;
 
-        public ScheduleManager(S jobDetailComposer, A triggerComposer)
+        public AddingOrderProvider(S jobDetailComposer, A triggerComposer)
         {
             this.jobDetailComposer = jobDetailComposer;
             this.triggerComposer = triggerComposer;
-            
+
         }
 
         public async Task AddOrder()
@@ -33,11 +35,7 @@ namespace WebScanner.Models.Managers
             IScheduler scheduler = await factory.GetScheduler();
             await scheduler.Start();
             await scheduler.ScheduleJob(jobDetail, trigger);
-        }
-
-        public void deleteOrder(int id)
-        {
-            throw new NotImplementedException();
+            Debug.WriteLine("Added Job");
         }
     }
 }

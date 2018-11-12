@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Quartz;
+using Quartz.Impl;
+using WebScanner.Examples;
+using WebScanner.Models.Composers;
+using WebScanner.Models.Jobs;
 
 namespace WebScanner
 {
@@ -18,7 +24,9 @@ namespace WebScanner
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            SimulateAddingOrder.Execute();
         }
+      
 
         public IConfiguration Configuration { get; }
 

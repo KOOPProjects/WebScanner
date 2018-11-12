@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using WebScanner.Models;
 using WebScanner.Models.Composers;
 using WebScanner.Models.Database;
@@ -8,9 +9,9 @@ using WebScanner.Models.UnitOfWork;
 
 namespace WebScanner.Controllers
 {
-    [ApiController]
+    //[ApiController]
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/orders")]
     public class OrdersController : Controller
     {
         private DatabaseContext _databaseContext;
@@ -20,9 +21,11 @@ namespace WebScanner.Controllers
             this._databaseContext = databaseContext;
         }
 
-        [HttpPost("Action")]
-        public IActionResult AddHtmlOrder(HtmlOrder order)
+        [HttpPost("[action]")]
+        public IActionResult AddHtmlOrder([FromBody]HtmlOrder order)
         {
+            Debug.WriteLine("debug do chuja: " + order.TargetAdress + order.SubjectOfQuestion);
+
             using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
             {
                 unitOfWork.HtmlOrderRepository.Add(order);
@@ -76,5 +79,6 @@ namespace WebScanner.Controllers
 
             return new JsonResult("dupa");
         }
+
     }
 }

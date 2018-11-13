@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebScanner.Models;
 using WebScanner.Models.Composers;
@@ -9,7 +10,6 @@ using WebScanner.Models.UnitOfWork;
 
 namespace WebScanner.Controllers
 {
-    //[ApiController]
     [Produces("application/json")]
     [Route("api/orders")]
     public class OrdersController : Controller
@@ -22,9 +22,14 @@ namespace WebScanner.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult AddHtmlOrder([FromBody]HtmlOrder order)
+        public async Task<IActionResult> AddHtmlOrder([FromBody] HtmlOrder order)
         {
-            Debug.WriteLine("debug do chuja: " + order.TargetAdress + order.SubjectOfQuestion);
+            Debug.WriteLine("Adding new order with frequency= " + order.Frequency + " , orderTarget= " + order.TargetAdress);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Request body is not correct!");
+            }
 
             using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
             {
@@ -39,46 +44,36 @@ namespace WebScanner.Controllers
                     new HtmlJobDetailComposer<HtmlOrderJob>(order.Id, order.TargetAdress, order.SubjectOfQuestion),
                     new SimpleTriggerComposer(order.Frequency, order.Id));
 
-            addingHtmlProvider.AddOrder();
+            await addingHtmlProvider.AddOrder();
 
             return new JsonResult(order.Id);
         }
 
-        [HttpPost("Action")]
-        public IActionResult AddServerOrder(ServerOrder order)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> DeleteHtmlOrder([FromBody] int orderId)
         {
-            using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
+            Debug.WriteLine("Deleting order with id= " + orderId);
+
+            if (!ModelState.IsValid)
             {
-                unitOfWork.ServerOrderRepository.Add(order);
-                unitOfWork.Save();
+                return BadRequest("Request body is not correct!");
             }
 
-            return new JsonResult("dupa");
-        }
-
-        [HttpPost("Action")]
-        public IActionResult DeleteHtmlOrder(int orderId)
-        {
             using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
             {
+                if (unitOfWork.HtmlOrderRepository.Get(orderId) == null)
+                {
+                    return BadRequest("Order not exist!");
+                }
                 unitOfWork.HtmlOrderRepository.Remove(unitOfWork.HtmlOrderRepository.Get(orderId));
                 unitOfWork.Save();
             }
 
-            return new JsonResult("dupa");
+            var deletingProvider = new DeletingOrderProvider();
+
+            await deletingProvider.DeleteOrder(orderId);
+
+            return new JsonResult(orderId);
         }
-
-        [HttpPost("Action")]
-        public IActionResult DeleteServerOrder(int orderId)
-        {
-            using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
-            {
-                unitOfWork.ServerOrderRepository.Remove(unitOfWork.ServerOrderRepository.Get(orderId));
-                unitOfWork.Save();
-            }
-
-            return new JsonResult("dupa");
-        }
-
     }
 }

@@ -49,8 +49,8 @@ namespace WebScanner.Controllers
             return new JsonResult(order.Id);
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> DeleteHtmlOrder([FromBody] int orderId)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> DeleteHtmlOrder(int orderId)
         {
             Debug.WriteLine("Deleting order with id= " + orderId);
 
@@ -66,6 +66,61 @@ namespace WebScanner.Controllers
                     return BadRequest("Order not exist!");
                 }
                 unitOfWork.HtmlOrderRepository.Remove(unitOfWork.HtmlOrderRepository.Get(orderId));
+                unitOfWork.Save();
+            }
+
+            var deletingProvider = new DeletingOrderProvider();
+
+            await deletingProvider.DeleteOrder(orderId);
+
+            return new JsonResult(orderId);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddServerOrder([FromBody] ServerOrder order)
+        {
+            Debug.WriteLine("Adding new order with frequency= " + order.Frequency + " , orderTarget= " + order.TargetAdress);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Request body is not correct!");
+            }
+
+            using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
+            {
+                unitOfWork.ServerOrderRepository.Add(order);
+                unitOfWork.Save();
+            }
+
+            var addingServerProvider = new AddingOrderProvider<
+                ServerJobDetailComposer<ServerOrderJob>,
+                SimpleTriggerComposer,
+                ServerOrderJob>(
+                    new ServerJobDetailComposer<ServerOrderJob>(order.Id, order.TargetAdress),
+                    new SimpleTriggerComposer(order.Frequency, order.Id));
+
+            await addingServerProvider.AddOrder();
+
+            return new JsonResult(order.Id);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> DeleteServerOrder(int orderId)
+        {
+            Debug.WriteLine("Deleting order with id= " + orderId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Request body is not correct!");
+            }
+
+            using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
+            {
+                if (unitOfWork.ServerOrderRepository.Get(orderId) == null)
+                {
+                    return BadRequest("Order not exist!");
+                }
+                unitOfWork.ServerOrderRepository.Remove(unitOfWork.ServerOrderRepository.Get(orderId));
                 unitOfWork.Save();
             }
 

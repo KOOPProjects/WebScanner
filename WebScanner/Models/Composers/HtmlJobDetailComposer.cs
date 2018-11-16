@@ -25,6 +25,7 @@ namespace WebScanner.Models.Composers
                     .WithIdentity(this.id.ToString())
                     .UsingJobData("TargetAddress", targetAddress)
                     .UsingJobData("Content", content)
+                    .UsingJobData("Id", id)
                     .Build();
         }
     }

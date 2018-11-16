@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using WebScanner.Models;
 using WebScanner.Models.Composers;
 using WebScanner.Models.Database;
@@ -15,10 +16,12 @@ namespace WebScanner.Controllers
     public class OrdersController : Controller
     {
         private DatabaseContext _databaseContext;
+       
 
         public OrdersController(DatabaseContext databaseContext) 
         {
             this._databaseContext = databaseContext;
+         
         }
 
         [HttpPost("[action]")]
@@ -34,7 +37,7 @@ namespace WebScanner.Controllers
             using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
             {
                 unitOfWork.HtmlOrderRepository.Add(order);
-                unitOfWork.Save();
+                await unitOfWork.Save();
             }
 
             var addingHtmlProvider = new AddingOrderProvider<
@@ -66,7 +69,7 @@ namespace WebScanner.Controllers
                     return BadRequest("Order not exist!");
                 }
                 unitOfWork.HtmlOrderRepository.Remove(unitOfWork.HtmlOrderRepository.Get(orderId));
-                unitOfWork.Save();
+                await unitOfWork.Save();
             }
 
             var deletingProvider = new DeletingOrderProvider();
@@ -89,7 +92,7 @@ namespace WebScanner.Controllers
             using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
             {
                 unitOfWork.ServerOrderRepository.Add(order);
-                unitOfWork.Save();
+                await unitOfWork.Save();
             }
 
             var addingServerProvider = new AddingOrderProvider<
@@ -121,7 +124,7 @@ namespace WebScanner.Controllers
                     return BadRequest("Order not exist!");
                 }
                 unitOfWork.ServerOrderRepository.Remove(unitOfWork.ServerOrderRepository.Get(orderId));
-                unitOfWork.Save();
+                await unitOfWork.Save();
             }
 
             var deletingProvider = new DeletingOrderProvider();

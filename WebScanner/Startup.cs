@@ -17,7 +17,11 @@ using Quartz.Impl;
 using WebScanner.Examples;
 using WebScanner.Models.Composers;
 using WebScanner.Models.Database;
+using WebScanner.Models.JobFactories;
 using WebScanner.Models.Jobs;
+using WebScanner.Models.Providers;
+using WebScanner.Models.Services;
+using WebScanner.Models.Services.Interfaces;
 
 namespace WebScanner
 {
@@ -35,12 +39,12 @@ namespace WebScanner
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var serviceCollection = new ServiceCollectionProvider().Provide();
+            foreach(var service in serviceCollection)
+            {
+                services.Add(service);
+            }
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            //var connectionString = Configuration.GetConnectionString("DATABASE_URL");
-            var connectionString =
-                "";
-            services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(options =>
-            options.UseNpgsql(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,7 +10,7 @@ namespace WebScanner.Models.Repositories
 {
     public abstract class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : DbEntity
     {
-        protected readonly DatabaseContext DatabaseContext;
+        protected DatabaseContext DatabaseContext;
 
         protected GenericRepository(DatabaseContext databaseContext)
         {

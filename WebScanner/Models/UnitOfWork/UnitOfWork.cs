@@ -10,7 +10,7 @@ namespace WebScanner.Models.UnitOfWork
     public class UnitOfWork : IDisposable
     {
         #region Fields
-        private readonly DatabaseContext _databaseContext;
+        private DatabaseContext _databaseContext;
         private ServerOrderRepository _serverOrderRepository;
         private HtmlOrderRepository _htmlOrderRepository;
         private ResponseRepository _responseRepository;
@@ -63,7 +63,7 @@ namespace WebScanner.Models.UnitOfWork
         }
         #endregion
         #region Methods
-        public void Save() => this._databaseContext.SaveChanges();
+        public async Task Save() => await this._databaseContext.SaveChangesAsync();
 
         protected virtual void Dispose(bool disposing)
         {

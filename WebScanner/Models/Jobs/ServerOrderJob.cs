@@ -1,8 +1,6 @@
 ﻿using Quartz;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using WebScanner.Models.Services;
@@ -19,9 +17,11 @@ namespace WebScanner.Models.Jobs
         }
         public async Task Execute(IJobExecutionContext context)
         {
-            var response = new Response();
-            response.Date = DateTime.Now;
-            response.OrderId = context.JobDetail.JobDataMap.GetInt("Id");
+            var response = new Response
+            {
+                Date = DateTime.Now,
+                OrderId = context.JobDetail.JobDataMap.GetInt("Id")
+            };
             var ping = new Ping();
             var pingReply = ping.Send(context.JobDetail.JobDataMap.GetString("TargetAddress"));
             response.Content = "{" + System.Environment.NewLine + "\"status\": " + "\"" + pingReply.Status.ToString() + "\"" + "," + System.Environment.NewLine + "\"latency\": " + pingReply.RoundtripTime.ToString() + Environment.NewLine + "}";

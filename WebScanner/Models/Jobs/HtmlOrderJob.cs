@@ -1,18 +1,9 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Quartz;
+﻿using Quartz;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using WebScanner.Models.Database;
 using WebScanner.Models.Services;
-using WebScanner.Models.Services.Interfaces;
 
 namespace WebScanner.Models.Jobs
 {
@@ -28,34 +19,26 @@ namespace WebScanner.Models.Jobs
      
         public async Task Execute(IJobExecutionContext context)
         {
-          
-
             using (WebClient client = new WebClient())
             {
-                var response = new Response();
-                response.Date = DateTime.Now;
-                response.OrderId = context.JobDetail.JobDataMap.GetInt("Id");
+                var response = new Response
+                {
+                    Date = DateTime.Now,
+                    OrderId = context.JobDetail.JobDataMap.GetInt("Id")
+                };
                 string url = context.JobDetail.JobDataMap.GetString("TargetAddress");
                 string content = client.DownloadString(url);
                 if (content.Contains(context.JobDetail.JobDataMap.GetString("Content")))
                 {
-                    response.Content = "{" + Environment.NewLine + "\"Status\":" + "\"Not changed\"";
+                    response.Content = "{" + Environment.NewLine + "\"Status\":" + "\"Not changed\"" + Environment.NewLine + "}";
                 }
                 else
                 {
-                    response.Content = "{" + Environment.NewLine + "\"Status\":" + "\"Changed\"";
+                    response.Content = "{" + Environment.NewLine + "\"Status\":" + "\"Changed\"" + Environment.NewLine + "}";
                 }
                     Debug.WriteLine(response.Content);
-                    await responseService.AddResponseToDb(response);
-             
-                
-                
-                
+                    await responseService.AddResponseToDb(response);                
             }
-
-
-           
-
         }
     }
 }

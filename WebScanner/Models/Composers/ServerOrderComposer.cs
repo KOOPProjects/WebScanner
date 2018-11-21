@@ -9,7 +9,7 @@ namespace WebScanner.Models.Composers
     public class ServerOrderComposer : IOrderComposer
     {
         private readonly string question;
-        private int frequency;
+        private readonly int frequency;
         private readonly string targetAddress;
 
         public ServerOrderComposer(int frequency, string targetAddress, string question)
@@ -20,7 +20,7 @@ namespace WebScanner.Models.Composers
         }
         public IOrder Compose()
         {
-            return new ServerOrder  { Frequency = this.frequency, Question = this.question, TargetAdress = this.targetAddress };
+            return new ServerOrder  { Frequency = this.frequency, Question = this.question, TargetAddress = this.targetAddress };
         }
     }
 }

@@ -9,8 +9,8 @@ namespace WebScanner.Models.Composers
 {
     public class SimpleTriggerComposer : ITriggerComposer
     {
-        private int intervalInSeconds;
-        private int id;
+        private readonly int intervalInSeconds;
+        private readonly int id;
         public SimpleTriggerComposer(int intervalInSeconds, int id)
         {
             this.intervalInSeconds = intervalInSeconds;

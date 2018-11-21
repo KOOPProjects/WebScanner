@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WebScanner.Models.Database;
 using WebScanner.Models.Jobs;
@@ -18,7 +13,7 @@ namespace WebScanner.Models.Providers
         {
             var services = new ServiceCollection();
             var connectionString =
-               "";
+               "User ID=staging;Password=YWSB14l9TvfB;Host=dev.ptrd.pl;Port=5432;Database=staging;Pooling=true;";
             services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(options =>
             options.UseNpgsql(connectionString));
             services.AddScoped<ResponseService>();

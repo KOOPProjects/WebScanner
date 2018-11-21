@@ -9,8 +9,8 @@ namespace WebScanner.Models.Composers
 {
     public class ServerJobDetailComposer<S> : IJobDetailComposer<S> where S : IJob
     {
-        private int id;
-        private string targetAddress;
+        private readonly int id;
+        private readonly string targetAddress;
         public ServerJobDetailComposer(int id, string targetAddress)
         {
             this.id = id;

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using WebScanner.Models.Database;
+using WebScanner.Models.Providers;
 
 namespace WebScanner
 {
@@ -19,16 +14,22 @@ namespace WebScanner
         {
             Configuration = configuration;
         }
-
+      
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var serviceCollection = new ServiceCollectionProvider().Provide();
+            foreach(var service in serviceCollection)
+            {
+                services.Add(service);
+            }
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            var schedulerConfigurator = new StartupConfigurator(services.BuildServiceProvider().GetService<DatabaseContext>());
+            schedulerConfigurator.Configurate();
+           
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -40,7 +41,7 @@ namespace WebScanner
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            
             app.UseMvc();
         }
     }

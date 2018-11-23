@@ -1,27 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Quartz;
-using Quartz.Impl;
-using WebScanner.Examples;
-using WebScanner.Models.Composers;
 using WebScanner.Models.Database;
-using WebScanner.Models.JobFactories;
-using WebScanner.Models.Jobs;
 using WebScanner.Models.Providers;
-using WebScanner.Models.Services;
-using WebScanner.Models.Services.Interfaces;
 
 namespace WebScanner
 {
@@ -42,6 +25,9 @@ namespace WebScanner
                 services.Add(service);
             }
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            var schedulerConfigurator = new StartupConfigurator(services.BuildServiceProvider().GetService<DatabaseContext>());
+            schedulerConfigurator.Configurate();
+           
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

@@ -5,7 +5,7 @@ WebScanner project - tool for monitoring servers, websites and services.
 
 #  Version
 
-v0.3.0
+v0.4.0
 
 #  Goal
 
@@ -41,11 +41,9 @@ Application is aimed at people who want to manage their network resources by sen
 
 #  Application interface
 
-* Adding order: `POST [host]/api/orders/add`
-or `POST [host]/api/orders`
-ARGUMENT: Order order ( MUST ADD A MODEL STRUCTURE )
-* Deleting order: `POST [host]/api/orders/delete`
-or `DELETE [host]/api/orders`
+* Adding order: `POST [host]/api/htmlorders` and `POST [host]/api/serverorders`
+ARGUMENT: HtmlOrder or ServerOrder
+* Deleting order: `GET [host]/api/htmlorders` and `GET [host]/api/serverorders`
 ARGUMENT: int orderId
 
  #  Solution Structure

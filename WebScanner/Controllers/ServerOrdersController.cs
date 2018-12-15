@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using WebScanner.Models;
 using WebScanner.Models.Composers;
@@ -52,7 +53,7 @@ namespace WebScanner.Controllers
             return new JsonResult(order.Id);
         }
 
-        [HttpGet]
+        [HttpDelete]
         public async Task<IActionResult> DeleteServerOrder([FromQuery] int orderId)
         {
             Debug.WriteLine("Deleting order with id= " + orderId);
@@ -78,5 +79,34 @@ namespace WebScanner.Controllers
 
             return new JsonResult(orderId);
         }
+
+        [HttpGet]
+        public IActionResult GetServerOrder([FromQuery] int orderId)
+        {
+            using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
+            {
+                var order = unitOfWork.ServerOrderRepository.Get(orderId);
+                if (order == null)
+                {
+                    return BadRequest("Order not found");
+                }
+                else
+                {
+                    return new JsonResult(order);
+                }
+
+            }
+
+        }
+
+        [HttpGet("GetAll")]
+        public IActionResult GetAllServerOrders()
+        {
+            using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
+            {
+                return new JsonResult(unitOfWork.ServerOrderRepository.GetAll());
+            }
+        }
+
     }
 }

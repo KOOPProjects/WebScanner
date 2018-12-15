@@ -17,8 +17,8 @@ namespace WebScanner.Models.Providers
                 };
             StdSchedulerFactory factory = new StdSchedulerFactory(props);
             IScheduler scheduler = await factory.GetScheduler();
-            await scheduler.DeleteJob(JobKey.Create(id.ToString()));
-            Debug.WriteLine("Deleted Job....");
+            bool a = await scheduler.DeleteJob(JobKey.Create(id.ToString()));
+            Debug.WriteLine("Deleted Job...." + a);
         }
     }
 }

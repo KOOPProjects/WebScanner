@@ -15,10 +15,10 @@ namespace WebScanner.Controllers
     public class HtmlOrdersController : Controller
     {
         private readonly DatabaseContext _databaseContext;
-       
-        public HtmlOrdersController(DatabaseContext databaseContext) 
+
+        public HtmlOrdersController(DatabaseContext databaseContext)
         {
-            this._databaseContext = databaseContext;      
+            this._databaseContext = databaseContext;
         }
 
         [HttpPost]
@@ -49,7 +49,7 @@ namespace WebScanner.Controllers
             return new JsonResult(order.Id);
         }
 
-        [HttpGet]
+        [HttpDelete]
         public async Task<IActionResult> DeleteHtmlOrder([FromQuery] int orderId)
         {
             Debug.WriteLine("Deleting order with id= " + orderId);
@@ -74,6 +74,34 @@ namespace WebScanner.Controllers
             await deletingProvider.DeleteOrder(orderId);
 
             return new JsonResult(orderId);
+        }
+
+        [HttpGet]
+        public IActionResult GetHtmlOrder([FromQuery] int orderId)
+        {
+            using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
+            {
+                var order = unitOfWork.HtmlOrderRepository.Get(orderId);
+                if (order == null)
+                {
+                    return BadRequest("Order not found");
+                }
+                else
+                {
+                    return new JsonResult(order);
+                }
+
+            }
+
+        }
+
+        [HttpGet("GetAll")]
+        public IActionResult GetAllHtmlOrders()
+        {
+            using (UnitOfWork unitOfWork = new UnitOfWork(this._databaseContext))
+            {
+                return new JsonResult(unitOfWork.HtmlOrderRepository.GetAll());
+            }
         }
     }
 }

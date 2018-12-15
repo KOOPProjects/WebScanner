@@ -24,7 +24,8 @@ namespace WebScanner.Models.Jobs
                 var response = new Response
                 {
                     Date = DateTime.Now,
-                    OrderId = context.JobDetail.JobDataMap.GetInt("Id")
+                    OrderId = context.JobDetail.JobDataMap.GetInt("Id"),
+                    Type = "html"
                 };
                 string url = context.JobDetail.JobDataMap.GetString("TargetAddress");
                 string content = client.DownloadString(url);

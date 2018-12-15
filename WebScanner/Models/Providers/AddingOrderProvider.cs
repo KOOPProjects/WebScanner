@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WebScanner.Models.Interfaces;
@@ -24,7 +25,11 @@ namespace WebScanner.Models.Providers
         {
             var jobDetail = jobDetailComposer.Compose();
             var trigger = triggerComposer.Compose();
-            StdSchedulerFactory factory = new StdSchedulerFactory();
+            NameValueCollection props = new NameValueCollection
+                {
+                    { "quartz.serializer.type", "binary" }
+                };
+            StdSchedulerFactory factory = new StdSchedulerFactory(props);
             IScheduler scheduler = await factory.GetScheduler();
             scheduler.JobFactory = new IntegrationJobFactory(new ServiceCollectionProvider().Provide().BuildServiceProvider());
             await scheduler.Start();

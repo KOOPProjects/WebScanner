@@ -20,11 +20,12 @@ namespace WebScanner.Models.Jobs
             var response = new Response
             {
                 Date = DateTime.Now,
-                OrderId = context.JobDetail.JobDataMap.GetInt("Id")
+                OrderId = context.JobDetail.JobDataMap.GetInt("Id"),
+                Type = "server"
             };
             var ping = new Ping();
             var pingReply = ping.Send(context.JobDetail.JobDataMap.GetString("TargetAddress"));
-            response.Content = "{" + System.Environment.NewLine + "\"status\": " + "\"" + pingReply.Status.ToString() + "\"" + "," + System.Environment.NewLine + "\"latency\": " + pingReply.RoundtripTime.ToString() + Environment.NewLine + "}";
+            response.Content = "{" + System.Environment.NewLine + "\"Status\": " + "\"" + pingReply.Status.ToString() + "\"" + "," + System.Environment.NewLine + "\"Latency\": " + pingReply.RoundtripTime.ToString() + Environment.NewLine + "}";
             Debug.WriteLine(response.Content);
             await responseService.AddResponseToDb(response);
         }

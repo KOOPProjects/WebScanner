@@ -21,19 +21,13 @@ namespace WebScanner.Models.Jobs
         {
             var response = new Response
             {
-                var response = new Response
-                {
-                    Date = DateTime.Now,
-                    OrderId = context.JobDetail.JobDataMap.GetInt("Id"),
-                    Type = "html"
-                };
-                string url = context.JobDetail.JobDataMap.GetString("TargetAddress");
-                string content = client.DownloadString(url);
-                if (content.Contains(context.JobDetail.JobDataMap.GetString("Content")))
-                {
-                    response.Content = "{" + Environment.NewLine + "\"Status\":" + "\"Not changed\"" + Environment.NewLine + "}";
-                }
-                else
+                Date = DateTime.Now,
+                OrderId = context.JobDetail.JobDataMap.GetInt("Id"),
+                Type = "html"
+            };
+            try
+            {
+                using (WebClient client = new WebClient())
                 {
                     string url = context.JobDetail.JobDataMap.GetString("TargetAddress");
                     string content = await client.DownloadStringTaskAsync(url);

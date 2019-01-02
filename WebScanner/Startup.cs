@@ -27,9 +27,9 @@ namespace WebScanner
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             //CORS CONFIG
             services.AddCors(options => options.AddPolicy("AllowAllOrigins",
-                builder =>
-                {
-                    builder.AllowAnyOrigin();
+               builder =>
+               {
+                   builder.AllowAnyOrigin();
             }));
             var schedulerConfigurator = new StartupConfigurator(services.BuildServiceProvider().GetService<DatabaseContext>());
             schedulerConfigurator.Configurate();

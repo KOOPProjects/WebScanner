@@ -19,25 +19,36 @@ namespace WebScanner.Models.Jobs
      
         public async Task Execute(IJobExecutionContext context)
         {
-            using (WebClient client = new WebClient())
+            var response = new Response
             {
-                var response = new Response
+                Date = DateTime.Now,
+                OrderId = context.JobDetail.JobDataMap.GetInt("Id"),
+                Type = "html"
+            };
+            try
+            {
+                using (WebClient client = new WebClient())
                 {
-                    Date = DateTime.Now,
-                    OrderId = context.JobDetail.JobDataMap.GetInt("Id")
-                };
-                string url = context.JobDetail.JobDataMap.GetString("TargetAddress");
-                string content = client.DownloadString(url);
-                if (content.Contains(context.JobDetail.JobDataMap.GetString("Content")))
-                {
-                    response.Content = "{" + Environment.NewLine + "\"Status\":" + "\"Not changed\"" + Environment.NewLine + "}";
+                    string url = context.JobDetail.JobDataMap.GetString("TargetAddress");
+                    string content = await client.DownloadStringTaskAsync(url);
+                    if (content.Contains(context.JobDetail.JobDataMap.GetString("Content")))
+                    {
+                        response.Content = "{" + Environment.NewLine + "\"Status\":" + "\"Not changed\"" + Environment.NewLine + "}";
+                    }
+                    else
+                    {
+                        response.Content = "{" + Environment.NewLine + "\"Status\":" + "\"Changed\"" + Environment.NewLine + "}";
+                    }
                 }
-                else
-                {
-                    response.Content = "{" + Environment.NewLine + "\"Status\":" + "\"Changed\"" + Environment.NewLine + "}";
-                }
-                    Debug.WriteLine(response.Content);
-                    await responseService.AddResponseToDb(response);                
+            }
+            catch(WebException e)
+            {
+                response.Content = "{" + Environment.NewLine + "\"Status\":" + "\"Failure\"" + Environment.NewLine + "}";
+            }
+            finally
+            {
+                Debug.WriteLine(response.Content);
+                await responseService.AddResponseToDb(response);
             }
         }
     }

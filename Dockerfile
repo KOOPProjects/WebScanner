@@ -17,4 +17,5 @@ RUN dotnet publish "WebScanner.csproj" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+COPY nginx.conf.sigil .
 ENTRYPOINT ["dotnet", "WebScanner.dll"]

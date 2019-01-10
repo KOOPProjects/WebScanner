@@ -29,8 +29,8 @@ namespace WebScanner
             services.AddCors(options => options.AddPolicy("AllowAllOrigins",
                builder =>
                {
-                   builder.AllowAnyOrigin();
-            }));
+                   builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+               }));
             var schedulerConfigurator = new StartupConfigurator(services.BuildServiceProvider().GetService<DatabaseContext>());
             schedulerConfigurator.Configurate();
            
@@ -46,7 +46,7 @@ namespace WebScanner
             {
                 app.UseHsts();
             }
-
+            
             app.UseCors("AllowAllOrigins");
             app.UseMvc();
         }

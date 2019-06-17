@@ -13,7 +13,7 @@ namespace WebScanner.Models.Providers
         {
             var services = new ServiceCollection();
             var connectionString =
-               " ";
+               "User ID=webscanner;Password=eCCxufUi3KmZX4DRuxDpdpZZFO8qJm8G;Host=s2.ptrd.pl;Port=5432;Database=webscanner;Pooling=true;";
             services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(options =>
             options.UseNpgsql(connectionString));
             services.AddScoped<ResponseService>();

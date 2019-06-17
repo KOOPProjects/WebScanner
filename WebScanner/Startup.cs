@@ -33,7 +33,9 @@ namespace WebScanner
                }));
             var schedulerConfigurator = new StartupConfigurator(services.BuildServiceProvider().GetService<DatabaseContext>());
             schedulerConfigurator.Configurate();
-           
+
+            
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

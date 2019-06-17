@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebScanner.Models;
@@ -92,7 +94,23 @@ namespace WebScanner.Controllers
                 }
 
             }
+        }
 
+        [HttpGet("Many")]
+        public IActionResult GetHtmlOrders([FromQuery] List<int> orderIds)
+        {
+            using (var unitOfWork = new UnitOfWork(this._databaseContext))
+            {
+                var orders = unitOfWork.HtmlOrderRepository.Find(x => orderIds.Contains(x.Id));
+                if(orders == null)
+                {
+                    return BadRequest("Orders not found");
+                }
+                else
+                {
+                    return new JsonResult(orders);
+                }
+            }
         }
 
         [HttpGet("GetAll")]
